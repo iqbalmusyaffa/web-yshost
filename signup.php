@@ -20,7 +20,6 @@ if (isset($_POST['btnsignup'])) {
         $alert = "<div class='alert alert-warning'>username sudah digunakan</div>";
         header("refresh:5;url=signup.php");
     }
-    
 }
 ?>
 <!DOCTYPE html>
@@ -49,19 +48,19 @@ if (isset($_POST['btnsignup'])) {
                                 ?>
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="typeEmailX-2">Email</label>
-                                    <input type="email" id="email" name="email" class=" form-control form-control-lg required" />
+                                    <input type="email" id="email" name="email" class=" form-control form-control-lg " required />
                                 </div>
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="typeEmailX-2">Username</label>
-                                    <input type="name" id="username" name="username" class=" form-control form-control-lg required" />
+                                    <input type="name" id="username" name="username" class=" form-control form-control-lg " required />
                                 </div>
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="typePasswordX-2">Password</label>
-                                    <input type="password" id="password1" name="password1" class=" form-control form-control-lg required" />
+                                    <input type="password" id="password1" name="password1" class=" form-control form-control-lg " required />
                                 </div>
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="typePasswordX-2">Konfimarsi Password</label>
-                                    <input type="password" id="password2" name="password2" class=" form-control form-control-lg " />
+                                    <input type="password" id="password2" name="password2" class=" form-control form-control-lg " required />
                                 </div>
                                 <button class="btn btn-lg btn-block btn-primary" style="background-color: #dd4b39;" type="submit" name="btnsignup"> Sign up</button>
                         </div>

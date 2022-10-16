@@ -4,6 +4,7 @@ session_start();
 if ($_SESSION['status'] != "login") {
     header("location:../login.php?pesan=belum_login");
 }
+date_default_timezone_set('Asia/Jakarta');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,9 +22,7 @@ if ($_SESSION['status'] != "login") {
     <!-- Custom fonts for this template-->
     <link href="../admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+
     <!-- Custom styles for this template-->
     <link href="../admin/css/sb-admin-2.min.css" rel="stylesheet">
 
@@ -63,9 +62,9 @@ if ($_SESSION['status'] != "login") {
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Kelola Barang</h6>
-                        <a class="collapse-item" href="../admin/kategori.php">Kategori</a>
-                        <a class="collapse-item" href="../admin/produk.php">Produk</a>
-                        <a class="collapse-item" href="../admin/bayar.php">Metode Pembayaran</a>
+                        <a class="collapse-item" href="kategori.php">Kategori</a>
+                        <a class="collapse-item" href="produk.php">Produk</a>
+                        <a class="collapse-item" href="bayar.php">Metode Pembayaran</a>
                     </div>
                 </div>
             </li>
@@ -218,7 +217,7 @@ if ($_SESSION['status'] != "login") {
                             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
                                 <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">7</span>
+                                <span class="badge badge-danger badge-counter"></span>
                             </a>
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">
@@ -283,11 +282,11 @@ if ($_SESSION['status'] != "login") {
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="profil.php">
+                                <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                <a class="dropdown-item" href="settings.php">
+                                <a class="dropdown-item" href="#">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Settings
                                 </a>
@@ -308,47 +307,50 @@ if ($_SESSION['status'] != "login") {
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Data Metode Pembayaran</h1>
-                        <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#modalTambah"><i class=" fas fa-plus fa-sm text-white-50"></i> Tambah Pembayaran</a>
-                    </div>
-                    <table id="data" class="table table-striped" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>id</th>
-                                <th>methodbayar</th>
-                                <th>nomorrekening</th>
-                                <th>Atas Nama</th>
-                                <th>Tgl buat</th>
-                                <th>Logo</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $bayar = mysqli_query($konek, "SELECT * FROM tb_bayar ORDER BY id_method ASC");
-                            $no = 1;
-                            while ($tampil = mysqli_fetch_array($bayar)) {
-                            ?>
-                                <tr>
-                                    <td><?php echo $no++ ?></td>
-                                    <td><?php echo $tampil['method_bayar'] ?></td>
-                                    <td><?php echo $tampil['nomor_rekening'] ?></td>
-                                    <td><?php echo $tampil['atas_nama'] ?></td>
-                                    <td><?php echo $tampil['tgl_buat'] ?></td>
-                                    <td><img src="<?php echo $tampil['logo'] ?>" width="45%" height="45%" \></td>
-                                    <td>
-                                        <a href="update_bayar.php?id=<?php echo $tampil['id_method']; ?>" class=" d-none d-sm-inline-block btn btn-primary btn-sm shadow-sm">Ubah</a>
-                                        <a href="hapus_bayar.php?id=<?php echo $tampil['id_method']; ?>" class="btn btn-danger btn-sm" style="font-weight: 600;"></i>Hapus</a>
-                                    </td>
-                                </tr>
-                            <?php } ?>
-                        </tbody>
-
-                    </table>
-
+                    <?php
+                    $id = $_GET['id'];
+                    $data = mysqli_query($konek, "select  * from tb_bayar where id_method='$id'");
+                    while ($tampil = mysqli_fetch_array($data)) {
+                    ?>
+                        <form action="" method="post" enctype="multipart/form-data">
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                <h1 class="h3 mb-0 text-gray-800">Update Data Metode Pembayaran</h1>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" hidden name="id_method" id="id_method" autocomplete="off" value="<?php echo $tampil['id_method']; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Metode Pembayaran</label>
+                                <input type="text" class="form-control"  name="method_bayar" value="<?php echo $tampil['method_bayar']; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Nomor Rekening atau Nomor pembayaran</label>
+                                <input type="text" class="form-control"  name="nomor_rekening" value="<?php echo $tampil['nomor_rekening']; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Atas Nama</label>
+                                <input type="text" class="form-control"  name="atas_nama" value="<?php echo $tampil['atas_nama']; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Tgl Edit</label>
+                                <input type="text" class="form-control" disabled name="tgl_buat" value="<?php echo $tampil['tgl_buat'] ?>">
+                            </div>
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">Logo Pembayaran</label>
+                                <input class="form-control" type="file" id="logo" name="nama_file" value="<?php echo $tampil['logo'] ?>">
+                                <img src="<?php echo $tampil['logo']; ?>" style="width: 20%; height:20%;">
+                                <p>file harus Jpg,Jpeg,PNG</p>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="submit" class="btn btn-primary btn-submit" id="btnupdate" name="btnupdate"></input>
+                                <button type="button" class="btn btn-secondary btn-reset">Batal</button>
+                            </div>
                 </div>
-                <!-- /.container-fluid -->
+            <?php
+                    }
+            ?>
+
+            <!-- /.container-fluid -->
 
             </div>
             <!-- End of Main Content -->
@@ -379,108 +381,73 @@ if ($_SESSION['status'] != "login") {
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Yakin Kamu Mau Log Out</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Jika Iya Klik Log Out, Jika Tidak Klik Tidak</div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Tidak</button>
-                    <a class="btn btn-primary" href="../logout.php">Logout</a>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="../login.php">Logout</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal tambah data transaksi penjualan -->
-    <div class="modal fade" id="modalTambah" tabindex="-1" role="dialog" aria-labelledby="modalTambah" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Input Metode Pembayaran</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <form action="" method="post" enctype="multipart/form-data">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <input type="hidden" class="form-control" id="id_method" name="id_method" autocomplete="off">
-                        </div>
-                        <div class="form-group">
-                            <label>Metode Pembayaran</label>
-                            <input type="text" class="form-control" id="method_bayar" name="method_bayar" autocomplete="off">
-                        </div>
-                        <div class="form-group">
-                            <label>Nomor Rekening atau Nomor pembayaran</label>
-                            <input type="text" class="form-control" id="nomor_rekening" name="nomor_rekening" autocomplete="off">
-                        </div>
-                        <div class="form-group">
-                            <label>Atas Nama</label>
-                            <input type="text" class="form-control" id="atas_nama" name="atas_nama" autocomplete="off">
-                        </div>
-                        <div class="mb-3">
-                            <label for="formFile" class="form-label">Logo Pembayaran</label>
-                            <input class="form-control" type="file" id="logo" name="nama_file">
-                            <p>file harus Jpg,Jpeg,PNG</p>
-                        </div>
-
-                        <div class="modal-footer">
-                            <input type="submit" class="btn btn-primary btn-submit" id="btntambah" name="btntambah"></input>
-                            <button type="button" class="btn btn-secondary btn-reset" data-dismiss="modal">Batal</button>
-                        </div>
-                </form>
-            </div>
-        </div>
-    </div>
     <!-- Bootstrap core JavaScript-->
     <script src="../admin/vendor/jquery/jquery.min.js"></script>
     <script src="../admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="../admin/js/sb-admin-2.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $('#data').DataTable();
-        });
-    </script>
+
 
 </body>
 
 </html>
-<!-- Tambah data -->
 <?php
-if (isset($_POST['btntambah'])) {
+if (isset($_POST['btnupdate'])) {
+    $id_method    = $_POST['id_method'];
+    $method_bayar    = $_POST['method_bayar'];
+    $nomor_rekening    = $_POST['nomor_rekening'];
+    $atas_nama    = $_POST['atas_nama'];
+    $tgl_buat       = date("Y-m-d");
+    
+
     $namafolder = "../assets/images/";
     if (!empty($_FILES["nama_file"]["tmp_name"])) {
-
         $jenis_gambar = $_FILES['nama_file']['type'];
-        $id_method = $_POST['id_method'];
-        $method_bayar = $_POST['method_bayar'];
-        $nomor_rekening = $_POST['nomor_rekening'];
-        $atas_nama = $_POST['atas_nama'];
-        $tgl_buat = date("Y-m-d");
 
+        // query SQL untuk insert data ke dalam Mysql
         if ($jenis_gambar == "image/jpeg" || $jenis_gambar == "image/jpg" || $jenis_gambar == "image/gif" || $jenis_gambar == "image/png") {
             $logo = $namafolder . basename($_FILES['nama_file']['name']);
             if (move_uploaded_file($_FILES['nama_file']['tmp_name'], $logo)) {
-                $sql = "INSERT INTO tb_bayar (id_method,method_bayar,nomor_rekening,atas_nama,tgl_buat,logo) VALUES
-            ('$id_method','$method_bayar','$nomor_rekening','$atas_nama','$tgl_buat','$logo')";
-                $tampil = mysqli_query($konek, $sql);
+
+                $result = mysqli_query(
+                    $konek,
+                    "UPDATE tb_bayar SET method_bayar='$method_bayar',nomor_rekening='$nomor_rekening',atas_nama='$atas_nama',tgl_buat='$tgl_buat',logo='$logo' WHERE id_method='$id_method'"
+                );
                 //echo "Gambar berhasil dikirim ke direktori".$gambar;
-                echo "<br><div class='alert alert-success'><strong>Success,</strong> Data berhasil disimpan</div>";
-            } else {
-                echo "<br><div class='alert alert-danger'><strong>Ups !!</strong> Gambar gagal dikirim</div";
+                if ($result) {
+                } else {
+                    echo "<br><script>alert('Data berhasil diupdate '); document.location.href = 'bayar.php';</script>";
+                }
             }
         } else {
             echo "<div class='alert alert-danger'><strong>Ups !!</strong> Jenis gambar yang anda kirim salah. Harus .jpg .gif .png</div>";
         }
     } else {
-        echo "<div class='alert alert-danger'><strong>Ups !!</strong> Anda Belum Memilih Gambar</div>";
+            $result = mysqli_query(
+                $konek,
+                "UPDATE tb_bayar SET method_bayar='$method_bayar',nomor_rekening='$nomor_rekening',atas_nama='$atas_nama' WHERE id_method='$id_method'"
+            );
+            //echo "Gambar berhasil dikirim ke direktori".$gambar;
+            if ($result) {
+            } else {
+                echo "<br><script>alert('Data berhasil diupdate '); document.location.href = 'bayar.php';</script>";
+            }
+        }
     }
-}
 ?>

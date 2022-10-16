@@ -4,6 +4,7 @@ session_start();
 if ($_SESSION['status'] != "login") {
     header("location:../login.php?pesan=belum_login");
 }
+date_default_timezone_set('Asia/Jakarta');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -332,7 +333,8 @@ if ($_SESSION['status'] != "login") {
                                     <td><?php echo $tampil['nama_kategori'] ?></td>
                                     <td><?php echo $tampil['tgl_buat'] ?></td>
                                     <td>
-                                        <a class="btn btn-primary btn-sm shadow-sm" data-toggle="modal" data-target="#modalubah">Ubah</a> <a href="#" class="btn btn-danger btn-sm" style="font-weight: 600;"></i>Hapus</a>
+                                        <a href="update_kategori.php?id=<?php echo $tampil['id_kategori']; ?>" class=" d-none d-sm-inline-block btn btn-primary btn-sm shadow-sm">Ubah</a>
+                                        <a href="hapus_kategori.php?id=<?php echo $tampil['id_kategori']; ?>" class="btn btn-danger btn-sm" style="font-weight: 600;"></i>Hapus</a>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -410,11 +412,11 @@ if ($_SESSION['status'] != "login") {
         </div>
     </div>
     <!-- Modal ubah data transaksi penjualan -->
-    <div class="modal fade" id="modalubah" tabindex="-1" role="dialog" aria-labelledby="modalubah" aria-hidden="true">
+    <div class="modal fade" id="ubahmodal" tabindex="-1" role="dialog" aria-labelledby="ubahmodal" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Ubah Data Transaksi Penjualan</h5>
+                    <h5 class="modal-title" id="tambah"><i class="fas fa-edit"></i> Ubah Data Transaksi Penjualan</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -436,10 +438,10 @@ if ($_SESSION['status'] != "login") {
     <?php
     if (isset($_POST['btnsimpan'])) {
         $kategori = $_POST['nama_kategori'];
-        $tanggal = date("Y-m-d H:i:s");
+        $tanggal =date("Y-m-d");
         $data = mysqli_query($konek, "INSERT INTO kategori Values('','$kategori','$tanggal')");
         if ($data) {
-            echo "<script>alert('Data berhasil dimasukan ');</script>";
+            echo "<script>alert('Data berhasil dimasukan '); document.location.href = 'kategori.php';</script>";
         } else {
             echo "<script>alert('Data gagal dimasukan ');</script>";
         }
@@ -457,7 +459,6 @@ if ($_SESSION['status'] != "login") {
         $(document).ready(function() {
             $('#data').DataTable();
         });
-    
     </script>
 </body>
 

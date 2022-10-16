@@ -307,9 +307,24 @@ if ($_SESSION['status'] != "login") {
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Profil</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
-
+                    <form action="" method="post">
+                        <div class="form-group">
+                            <input type="text" class="form-control" hidden name="id_kategori" autocomplete="off" value="">
+                        </div>
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" class="form-control" name="nama_kategori" value="" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="text" class="form-control"  name="tgl_buat" value="" autocomplete="off">
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-primary btn-submit" id="btnupdate" name="btnupdate"></input>
+                            <button type="button" class="btn btn-secondary btn-reset">Batal</button>
+                        </div>
                 </div>
                 <!-- /.container-fluid -->
 
